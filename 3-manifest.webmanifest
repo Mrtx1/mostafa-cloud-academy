@@ -1,0 +1,71 @@
+{
+  "id": "./",
+  "name": "أكاديمية مصطفى السحابية | AWS & DevOps & DevSecOps",
+  "short_name": "مسار مصطفى",
+  "description": "تطبيق تعليمي تقدمي (PWA) يعمل دون اتصال بالإنترنت لإتقان هندسة السحابة (AWS) والـ DevOps والـ DevSecOps خلال 9 أشهر.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#140a0d",
+  "theme_color": "#ef4444",
+  "categories": [
+    "education",
+    "productivity",
+    "developer tools"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "لوحة التقدم والمنهج",
+      "short_name": "المنهج",
+      "description": "استعراض الوحدات الـ 27 وتتبع الإنجاز",
+      "url": "./?view=dashboard"
+    },
+    {
+      "name": "خطة الـ 9 أشهر والأجهزة",
+      "short_name": "خطة 9 أشهر",
+      "description": "جدول توزيع الساعات وعتاد Fedora و Rocky Linux",
+      "url": "./?view=plan9m"
+    },
+    {
+      "name": "دليل أدوات free-for.dev",
+      "short_name": "أدوات مجانية",
+      "description": "الجدول المنظم لأفضل الخدمات السحابية المجانية",
+      "url": "./?view=freefordev"
+    }
+  ]
+}
