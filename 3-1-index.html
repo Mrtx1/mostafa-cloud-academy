@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>مسار مصطفى السحابي | البوابة التعليمية لهندسة السحابة والـ DevOps والـ DevSecOps</title>
+  <meta name="description" content="تطبيق تعليمي تقدمي (PWA) يعمل دون اتصال بالإنترنت، مصمم خصيصاً لمصطفى للانتقال من الصفر إلى مهندس سحابة وبنية تحتية (AWS & DevOps & DevSecOps) خلال 9 أشهر. إصدار 5: إعادة هيكلة كاملة بمعمارية متعددة الملفات." />
+  <meta name="theme-color" content="#140a0d" id="meta-theme-color" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="مسار مصطفى" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f172a'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-size='62'>☁️</text></svg>" />
+  <!-- v5.0.0: structural rebuild - separated stylesheet, data module and app logic -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-brand-500 selection:text-slate-950 transition-colors duration-200">
+
+  <!-- Clean App Loading State Overlay -->
+  <div id="app-loading-overlay" role="status" aria-live="polite">
+    <div class="loader-spinner"></div>
+    <div class="text-center space-y-1">
+      <div class="text-base font-extrabold text-brand-400">جاري تجهيز أكاديمية مصطفى السحابية...</div>
+      <div class="text-xs text-slate-400">تطبيق يعمل بالكامل دون اتصال بالإنترنت (Offline-First PWA)</div>
+    </div>
+  </div>
+
+
+  <!-- Slim sticky header: brand + primary navigation + compact tools.
+       The only persistent chrome - learning content leads the page. -->
+  <header id="sticky-nav-bar" class="no-print sticky top-0 z-40 backdrop-blur-md bg-slate-950/90 border-b border-slate-800/80 shadow-md">
+    <div class="max-w-7xl mx-auto px-3 py-2 flex items-center gap-2" style="position:relative;">
+      <span class="flex items-center gap-1.5 shrink-0">
+        <span style="font-size:17px;line-height:1;" aria-hidden="true">☁️</span>
+        <span class="brand-label text-sm font-extrabold text-white whitespace-nowrap">أكاديمية مصطفى</span>
+        <span class="hidden lg:inline px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-500/15 text-brand-400 border border-brand-500/30">AWS &amp; DevOps 2026</span>
+      </span>
+      <button type="button" class="menu-btn" data-toggle-menu aria-label="قائمة التنقل" aria-expanded="false"><span style="font-size:16px;">☰</span><span>القائمة</span></button>
+      <nav aria-label="التنقل الرئيسي" class="main-nav flex-1 flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0" style="scrollbar-width:none;">
+        <button type="button" data-nav="dashboard" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-brand-500 text-slate-950 shadow-sm">
+          <span>🏠</span>
+          <span>الرئيسية</span>
+        </button>
+        <button type="button" data-nav="curriculum" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800">
+          <span>📚</span>
+          <span>المنهج</span>
+        </button>
+        <button type="button" data-nav="plan9m" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800">
+          <span>🗓️</span>
+          <span>الخطة والأجهزة</span>
+        </button>
+        <button type="button" data-nav="analysis" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800">
+          <span>🎯</span>
+          <span>التحليل</span>
+        </button>
+        <button type="button" data-nav="freefordev" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800">
+          <span>🎁</span>
+          <span>أدوات مجانية</span>
+        </button>
+        <button type="button" data-nav="report" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800">
+          <span>🖨️</span>
+          <span>التقرير</span>
+        </button>
+      </nav>
+      <div class="flex items-center gap-1 shrink-0">
+        <button id="btn-Log-study" type="button" title="تسجيل جلسة مذاكرة اليوم (سلسلة الاستمرارية)" class="px-2 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition flex items-center gap-1">
+          <span>🔥</span>
+          <span id="streak-header-count">0 يوم</span>
+        </button>
+        <button id="btn-export-quick" type="button" title="تصدير نسخة احتياطية سريعة (JSON)" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition">💾</button>
+        <button id="btn-shortcuts" type="button" title="اختصارات لوحة المفاتيح (?)" class="hidden sm:inline-block p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition">⌨️</button>
+        <button id="btn-theme" type="button" title="تبديل الوضع الليلي / النهاري (Alt+T)" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs transition flex items-center gap-1">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label" class="hidden lg:inline text-xs font-semibold">الوضع النهاري</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-8">
+
+    <!-- ==================== VIEW 1: DASHBOARD & CURRICULUM ==================== -->
+    <section id="view-dashboard" class="space-y-6">
+
+      <!-- Plan at a Glance: quick navigation + per-unit progress strip.
+           Pattern inspired by the MIT-licensed reference app Luck1y1337/kyoto-mission
+           (status-height tick strip); implementation original, no code copied. -->
+      <div id="continue-hero" class="kk-hero" style="display:none;"></div>
+
+      <div id="plan-glance" class="p-4 rounded-2xl bg-slate-900/70 border border-slate-800/90 space-y-3">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+            <span>🧭</span>
+            <span>لمحة سريعة على خطتك - كل علامة = وحدة، اضغطها للانتقال إليها</span>
+          </h2>
+          <div id="plan-glance-counts" class="text-[11px] text-slate-400 font-semibold"></div>
+        </div>
+        <div id="plan-glance-strip" class="flex flex-wrap" style="gap:3px;align-items:flex-end;"></div>
+        <div class="text-[10px] text-slate-500 font-semibold flex items-center gap-3 flex-wrap">
+          <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#10b981;"></span> مكتملة</span>
+          <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;"></span> قيد الدراسة</span>
+          <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#334155;"></span> لم تبدأ</span>
+          <span class="text-slate-600">| العلامات الباهتة = المرحلة الثانية (DevSecOps)</span>
+        </div>
+        <div id="quick-nav" style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;border-top:1px solid rgba(51,65,85,0.5);">
+          <button type="button" data-goto="units" style="padding:6px 12px;border-radius:9999px;background:rgba(239,68,68,0.12);color:#fca5a5;border:1px solid rgba(239,68,68,0.35);font-size:11px;font-weight:800;cursor:pointer;">📚 الوحدات</button>
+          <button type="button" data-goto="coursera" style="padding:6px 12px;border-radius:9999px;background:rgba(59,130,246,0.12);color:#93c5fd;border:1px solid rgba(59,130,246,0.35);font-size:11px;font-weight:800;cursor:pointer;">🎓 شهادات Coursera</button>
+          <button type="button" data-goto="plan9m" style="padding:6px 12px;border-radius:9999px;background:rgba(16,185,129,0.12);color:#6ee7b7;border:1px solid rgba(16,185,129,0.35);font-size:11px;font-weight:800;cursor:pointer;">🗓️ خطة الـ9 أشهر</button>
+          <button type="button" data-goto="report" style="padding:6px 12px;border-radius:9999px;background:rgba(168,85,247,0.12);color:#d8b4fe;border:1px solid rgba(168,85,247,0.35);font-size:11px;font-weight:800;cursor:pointer;">📄 التقرير</button>
+        </div>
+      </div>
+
+      <!-- Top Progress Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- Card 1: Overall Completion -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-400">الإنجاز الكلي للمسار (27 وحدة)</span>
+            <span class="text-lg">🏆</span>
+          </div>
+          <div class="my-2">
+            <div class="flex items-baseline justify-between">
+              <span id="stat-overall-pct" class="text-2xl font-extrabold text-white">0%</span>
+              <span id="stat-overall-fraction" class="text-xs text-slate-400 font-mono">0 / 27 وحدة</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden mt-2">
+              <div id="bar-overall-pct" class="h-full bg-gradient-to-l from-brand-400 to-brand-600 transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+          <p id="stat-resources-done" class="text-[11px] text-slate-400">0 من 108 مصدر تعليمي وأداة مكتمل</p>
+        </div>
+
+        <!-- Card 2: Phase 1 (9-Month AWS & DevOps Goal) -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-brand-500/30 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-brand-400">المرحلة 1: خطة الـ 9 أشهر (AWS)</span>
+            <span class="text-lg">☁️</span>
+          </div>
+          <div class="my-2">
+            <div class="flex items-baseline justify-between">
+              <span id="stat-p1-pct" class="text-2xl font-extrabold text-brand-400">0%</span>
+              <span id="stat-p1-units" class="text-xs text-slate-400 font-mono">0 / 18 وحدة</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden mt-2">
+              <div id="bar-p1-pct" class="h-full bg-brand-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+          <p id="stat-p1-hours" class="text-[11px] text-slate-300">متبقي 612 ساعة من إجمالي 612 ساعة (9 أشهر)</p>
+        </div>
+
+        <!-- Card 3: Unit Status Breakdown -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-400">تفصيل حالة الوحدات</span>
+            <span class="text-lg">📌</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 my-2 text-center">
+            <div class="p-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <div id="stat-count-completed" class="text-lg font-extrabold text-emerald-400 font-mono">0</div>
+              <div class="text-[10px] text-emerald-300">مكتملة</div>
+            </div>
+            <div class="p-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <div id="stat-count-inprogress" class="text-lg font-extrabold text-amber-400 font-mono">0</div>
+              <div class="text-[10px] text-amber-300">قيد الدراسة</div>
+            </div>
+            <div class="p-1.5 rounded-xl bg-slate-800/80 border border-slate-700">
+              <div id="stat-count-notstarted" class="text-lg font-extrabold text-slate-300 font-mono">27</div>
+              <div class="text-[10px] text-slate-400">لم تبدأ</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">تتبع دقيق لكل مصدر ومهمة عملية</p>
+        </div>
+
+        <!-- Card 4: Remaining Time Estimate -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-400">الوقت المتبقي لإنهاء الـ 9 أشهر</span>
+            <span class="text-lg">⏱️</span>
+          </div>
+          <div class="my-2">
+            <div id="stat-remaining-weeks" class="text-xl font-extrabold text-white">36 أسبوع دراسة + 3 مراجعة</div>
+            <div id="stat-remaining-hours-detail" class="text-xs text-brand-400 mt-1 font-medium">بمعدل 17 ساعة أسبوعياً، و3 أسابيع مراجعة موزعة داخل الـ 9 أشهر</div>
+          </div>
+          <p id="stat-phase2-unlock" class="text-[11px] text-slate-400">🔒 المرحلة 2 (DevSecOps) تُفتح بعد إتمام المرحلة 1</p>
+        </div>
+
+        <!-- Card 5: Study Streak & Quick Check-in -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400">سلسلة الاستمرارية (Streak)</span>
+            <span class="text-lg">🔥</span>
+          </div>
+          <div class="my-2 flex items-center justify-between">
+            <div>
+              <div class="flex items-baseline gap-1">
+                <span id="stat-streak-days" class="text-2xl font-extrabold text-emerald-400 font-mono">0</span>
+                <span class="text-xs text-slate-300 font-bold">يوم متتالي</span>
+              </div>
+              <p id="stat-last-study" class="text-[11px] text-slate-400 mt-0.5">لم يتم تسجيل جلسة اليوم بعد</p>
+            </div>
+            <button id="btn-card-streak" type="button" class="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition shadow">
+              + سجّل اليوم
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400">الالتزام اليومي (2-3 ساعات) سر النجاح</p>
+        </div>
+      </div>
+
+      <!-- Coursera Specializations Integration Bar -->
+      <div id="coursera-section" class="p-4 rounded-2xl bg-slate-900/70 border border-slate-800/90">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+          <div>
+            <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+              <span>🎓</span>
+              <span>شهادات Coursera — مراجعة بالساعات الرسمية (مطلوب vs تكميلي) + إضافة أساس بطلبك</span>
+            </h2>
+            <p class="text-xs text-slate-400">راجعنا مناهج الشهادات فعليًا على موقع Coursera: لست مطالبًا بكل كورس في كل شهادة. الأساسيتان في مسارك هما Google IT Automation و IBM Applied DevOps، أما Google Cybersecurity فتخصص اختياري إضافي لمرحلة DevSecOps. الأساسي موزع على الوحدات، والتكميلي اختياري عند الحاجة — لتجنب التكرار وضياع الأسابيع. تنبيه مهم: دراسة كورسات منتقاة تعني أنك لن تحصل على الشهادة الورقية الكاملة (تتطلب إتمام كل الكورسات والمشاريع)؛ الأولوية هنا للمهارة المطلوبة لهدفك، والشهادة الكاملة قرار اختياري لاحق.</p>
+          </div>
+          <button type="button" id="btn-filter-coursera" class="self-start md:self-auto px-3 py-1.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 border border-blue-500/30 text-xs font-bold transition">
+            🔍 عرض الوحدات المرتبطة بشهادات Coursera فقط
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="font-bold text-amber-400">1. Google IT Automation with Python</span>
+                <span class="en-tag">Coursera</span>
+              </div>
+              <p class="text-emerald-300/90 text-[11px] font-semibold mb-1">الحكم: مناسبة وصحيحة للمسار ✅ (مستوى مبتدئ، ~6 أشهر بمعدل 10 س/أسبوع)</p>
+              <p class="text-slate-400 text-[11px]"><strong class="text-slate-200">مطلوبة:</strong> Crash Course on Python (21س ← و7)، Using Python with the OS (33س ← و4-5)، Git &amp; GitHub (20س ← و6)، Configuration Management &amp; Cloud (18س ← و16)، Automating Real-World Tasks (17س ← و17).</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>تكميلي:</strong> Troubleshooting &amp; Debugging (19س) عند الحاجة، وكورس التسريع الوظيفي بالذكاء الاصطناعي (6س) اختياري.</p>
+            </div>
+            <a href="https://www.coursera.org/professional-certificates/google-it-automation" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1 text-brand-400 hover:underline font-semibold">
+              <span>فتح التخصص الرسمي على Coursera</span>
+              <span>↗</span>
+            </a>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="font-bold text-cyan-400">2. IBM Applied DevOps Engineering</span>
+                <span class="en-tag">Coursera</span>
+              </div>
+              <p class="text-emerald-300/90 text-[11px] font-semibold mb-1">الحكم: الشهادة الصحيحة للهدف ✅ لكن 6 كورسات من 9 أساسية فقط (تفترض خلفية برمجية يغطيها ترتيب الخطة)</p>
+              <p class="text-slate-400 text-[11px]"><strong class="text-slate-200">مطلوبة:</strong> Intro to DevOps (9س ← و1)، Containers Docker/K8s/OpenShift (17س ← و9-10)، CI/CD (15س ← و13-14)، Application Security for DevOps (17س ← جسر للمرحلة 2، و19)، Monitoring &amp; Observability (16س ← و15)، Capstone (20س ← و17).</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>تكميلي (ميل للمطورين):</strong> Agile &amp; Scrum (12س)، Microservices &amp; Serverless (16س)، TDD/BDD (21س).</p>
+            </div>
+            <a href="https://www.coursera.org/professional-certificates/ibm-applied-devops-engineering" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1 text-cyan-400 hover:underline font-semibold">
+              <span>فتح التخصص الرسمي على Coursera</span>
+              <span>↗</span>
+            </a>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="font-bold text-emerald-400">3. Google Cybersecurity Certificate</span>
+                <span class="en-tag">Coursera</span>
+              </div>
+              <p class="text-amber-300/90 text-[11px] font-semibold mb-1">الحكم: تخصص اختياري بالكامل وليس أساسيًا في مسارك ⚠️ موجه لمحلل أمن (SOC) ويجهز لـ Security+ — الأساس هو الشهادتان أعلاه، وهذه إضافة قوية لمرحلة DevSecOps إن اخترتها، وتخطيها لا يكسر خطة السحابة</p>
+              <p class="text-slate-400 text-[11px]"><strong class="text-slate-200">منتقاة مرتبطة بالمسار (~66 ساعة، كلها اختيارية):</strong> Foundations (10س ← و19)، Play It Safe (9س ← و19)، Assets &amp; Threats &amp; Vulnerabilities (19س ← و21)، Detection &amp; Response (17س ← و26)، Prepare for Cybersecurity Jobs (11س ← و27).</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>تكميلي/مكرر:</strong> Networks (12س ← راجعها مع و1)، Linux &amp; SQL (23س ← راجعها مع و3-4، جزء SQL جديد ومفيد)، Automate Cybersecurity with Python (25س ← راجعها مع و7).</p>
+            </div>
+            <a href="https://www.coursera.org/professional-certificates/google-cybersecurity" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1 text-emerald-400 hover:underline font-semibold">
+              <span>فتح التخصص الرسمي على Coursera</span>
+              <span>↗</span>
+            </a>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-amber-500/40 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="font-bold text-amber-300">4. Google IT Support — إضافة أساس مقترحة (بطلبك)</span>
+                <span class="en-tag">Coursera</span>
+              </div>
+              <p class="text-emerald-300/90 text-[11px] font-semibold mb-1">الحكم: أقوى أساس منظّم على Coursera لما قبل السحابة ✅ (6 كورسات/122 ساعة، مبتدئ، ~3 أشهر بمعدل 10س/أسبوع) — لكن إتمامها كاملة يضيف 4-6 أسابيع ويكسر ميزانية الأشهر التسعة، لذا المنتقاة التالية هي المتوافقة مع خطتك</p>
+              <p class="text-slate-400 text-[11px]"><strong class="text-slate-200">المنتقاة المقترحة (~46 ساعة بدل 122):</strong> The Bits and Bytes of Computer Networking (22س ← تعمّق و1: DNS/DHCP/IPv6 وتقسيم الشبكات بمعامل عملية منظمة)، System Administration &amp; IT Infrastructure Services (24س ← تدعم و4 وو16 وتمرين النسخ الاحتياطي التصحيحي في و8).</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>اختياري عند الحاجة:</strong> Operating Systems and You (28س ← مراجعة و3-4 مع إضافة إدارة Windows)، IT Security (23س ← مراجعة و19-20). <strong>تخطَّ:</strong> Technical Support Fundamentals (19س، مادة دعم فني خارج هدفك) وAccelerate Your Job Search with AI (6س).</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>التوظيف دون زيادة حمل:</strong> المنتقاة تحل محل ساعات التأسيس المكافئة في و1 وو4 (فيديوهات ومقالات تغطي نفس الموضوع)، لا تضاف فوقها — والشهادة الورقية الكاملة قرار لاحق خارج الخطة. قارنّاها بـ IBM IT Support (9 كورسات/105 ساعات، مشابهة في المجال)، ورجّحناها لأنها تكمل نفس عائلة شهادات Google الموجودة في خطتك.</p>
+              <p class="text-slate-500 text-[11px] mt-1"><strong>📍 مكانها في الخطة:</strong> الكورسان مضافان فعلياً داخل مصادر الوحدة 1 (الشبكات) والوحدة 4 (إدارة الأنظمة) كمسار منظم بطلبك - افتح أي وحدة منهما وستجده ضمن مواردها.</p>
+            </div>
+            <a href="https://www.coursera.org/professional-certificates/google-it-support" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1 text-amber-300 hover:underline font-semibold">
+              <span>فتح التخصص الرسمي على Coursera</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+
+    <!-- ==================== VIEW: CURRICULUM - focused study area (months/weeks/lessons organized) ==================== -->
+    <section id="view-curriculum" class="hidden space-y-6">
+      <!-- Search & Multi-Facet Filter Bar (selects/pills collapse behind a toggle on mobile) -->
+      <div id="filters-panel" class="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-md space-y-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+          <!-- Smart Search Input -->
+          <div class="lg:col-span-5 relative">
+            <label for="input-search" class="sr-only">بحث ذكي في الوحدات والمصادر والأدوات</label>
+            <input
+              id="input-search"
+              type="search"
+              placeholder="ابحث بالعربية أو الإنجليزية (مثال: AWS, Terraform, لينكس, dolfined, Docker, أمان)..."
+              class="w-full pr-10 pl-20 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-brand-500 focus:outline-none text-sm text-white placeholder-slate-500"
+            />
+            <span class="absolute right-3.5 top-3 text-slate-400 pointer-events-none">🔍</span>
+            <kbd class="absolute left-3 top-2.5 px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700 pointer-events-none">/</kbd>
+          </div>
+
+          <!-- Phase Filter -->
+          <div class="lg:col-span-3 filter-extra">
+            <label for="select-phase" class="sr-only">تصفية حسب المرحلة</label>
+            <select id="select-phase" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-brand-500 focus:outline-none text-xs sm:text-sm text-slate-200 font-semibold">
+              <option value="all">جميع المراحل (27 وحدة)</option>
+              <option value="1">المرحلة 1: تأسيس DevOps و AWS (18 وحدة - 9 أشهر)</option>
+              <option value="2">المرحلة 2: أمن DevSecOps المتقدم (9 وحدات)</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="lg:col-span-2 filter-extra">
+            <label for="select-status" class="sr-only">تصفية حسب الحالة</label>
+            <select id="select-status" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-brand-500 focus:outline-none text-xs sm:text-sm text-slate-200 font-semibold">
+              <option value="all">كل الحالات</option>
+              <option value="not_started">لم تبدأ</option>
+              <option value="in_progress">قيد الدراسة</option>
+              <option value="completed">مكتملة</option>
+            </select>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="lg:col-span-2 filter-extra">
+            <label for="select-difficulty" class="sr-only">تصفية حسب الصعوبة</label>
+            <select id="select-difficulty" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-brand-500 focus:outline-none text-xs sm:text-sm text-slate-200 font-semibold">
+              <option value="all">كل المستويات</option>
+              <option value="مبتدئ">مبتدئ</option>
+              <option value="متوسط">متوسط</option>
+              <option value="متقدم">متقدم</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" data-toggle-filters class="filter-toggle" aria-expanded="false"><span>⚙️ الفلاتر والوصول السريع</span><span class="ft-caret">▾</span></button>
+
+        <!-- Secondary Filter Pills & Results Counter -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-xs filter-extra">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-slate-400 ml-1">وصول سريع:</span>
+            <button type="button" data-quick-filter="all" class="quick-pill px-2.5 py-1 rounded-lg bg-brand-500 text-slate-950 font-bold transition">الكل (27)</button>
+            <button type="button" data-quick-filter="dolfined" class="quick-pill px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition">🎥 وحدات بفيديو dolfined مباشر</button>
+            <button type="button" data-quick-filter="aws" class="quick-pill px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 transition">☁️ تركيز AWS الأساسي</button>
+            <button type="button" data-quick-filter="multicloud" class="quick-pill px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 transition">🌐 الشهر 9: Azure & GCP</button>
+            <button type="button" data-quick-filter="hasnotes" class="quick-pill px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 transition">📝 وحدات تحتوي على ملاحظاتي</button>
+            <button type="button" id="btn-reset-filters" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition hidden">✖ مسح الفلاتر</button>
+          </div>
+          <div id="search-results-counter" class="text-slate-400 font-medium">
+            يتم عرض <strong class="text-white">27</strong> من <strong class="text-white">27</strong> وحدة تعليمية
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 Gate Banner (Notice that Phase 2 starts after 9-month Phase 1) -->
+      <div id="phase2-notice-banner" class="p-4 rounded-2xl bg-gradient-to-l from-teal-950/60 via-slate-900 to-slate-900 border border-teal-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-lg shrink-0">
+            🛡️
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-teal-300">تنبيه منهجي هام حول المرحلة الثانية (DevSecOps - 9 وحدات)</h3>
+            <p class="phase-banner-text text-xs text-slate-300 mt-0.5">
+              صُممت المرحلة الأولى لتستغرق <strong>9 أشهر كاملة (18 وحدة - 612 ساعة)</strong> بتركيز عميق على <strong>AWS</strong> وأدوات الـ DevOps الأساسية، مع تقديم <strong>Azure و GCP</strong> في الشهر التاسع فقط للوعي متعدد السحابات. لا تبدأ وحدات المرحلة الثانية (DevSecOps) إلا بعد إتمام الأساس الصلب في المرحلة الأولى.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" id="btn-jump-phase1" class="px-3 py-1.5 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs transition">
+            التركيز على المرحلة 1
+          </button>
+          <button type="button" id="btn-jump-phase2" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/30 font-bold text-xs transition">
+            استعراض المرحلة 2
+          </button>
+        </div>
+      </div>
+
+      <!-- Units Grid Container -->
+      <div id="units-container" class="space-y-3"></div>
+
+      <!-- Empty State when Search/Filters match nothing -->
+      <div id="units-empty-state" class="hidden p-12 rounded-2xl bg-slate-900/80 border border-slate-800 text-center space-y-3">
+        <div class="text-4xl">🧭</div>
+        <h3 class="text-lg font-bold text-white">لا توجد وحدات مطابقة لمعايير البحث أو التصفية الحالية</h3>
+        <p class="text-sm text-slate-400 max-w-md mx-auto">
+          جرّب البحث بكلمات أخرى (مثل: لينكس، Docker، AWS، Terraform، أمان) أو قم بإعادة ضبط فلاتر المرحلة والحالة.
+        </p>
+        <button type="button" id="btn-empty-reset" class="px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-sm transition">
+          إعادة عرض جميع الوحدات (27 وحدة)
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW: UNIT STUDY MODE - one unit, all sources and notes ==================== -->
+    <section id="view-unit" class="hidden space-y-4">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button type="button" id="btn-study-back" style="padding:8px 16px;border-radius:12px;background:rgba(30,41,59,0.9);color:#e2e8f0;border:1px solid #334155;font-size:13px;font-weight:800;cursor:pointer;">→ رجوع إلى المنهج</button>
+        <p class="study-hint" style="font-size:11px;color:#64748b;font-weight:700;">🎯 وضع الدراسة المركّز: وحدة واحدة بكل مصادرها وملاحظاتك - تنقّل بين الوحدات بالأسهم بالأسفل</p>
+      </div>
+      <div id="unit-study-host" class="space-y-6"></div>
+      <div id="unit-study-nav" style="display:flex;align-items:center;justify-content:space-between;gap:8px;"></div>
+    </section>
+
+    <!-- ==================== VIEW 2: 9-MONTH PLAN & HARDWARE LAB ==================== -->
+    <section id="view-plan9m" class="hidden space-y-6">
+  <!-- Top Announcement / Hardware Context & Live Offline Connectivity Bar -->
+  <div class="env-banner no-print bg-gradient-to-l from-slate-900 via-slate-900 to-amber-950/40 rounded-2xl border border-slate-800/80 px-4 py-3 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-brand-500/20 text-brand-400 font-semibold border border-brand-500/30">
+          💻 بيئة مصطفى الفعلية
+        </span>
+        <span class="text-slate-300 env-detail">
+          <strong>الحاسوب اليومي:</strong> Fedora Workstation (i5-6200U, 8GB RAM, SSD+HDD)
+        </span>
+        <span class="text-slate-500 env-detail">|</span>
+        <span class="text-slate-300 env-detail">
+          <strong>خادم المختبر:</strong> Rocky Linux Minimal + Kickstart (i3-2200, 4GB RAM, HDD)
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="pwa-status-badge" class="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
+          <span id="network-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="network-status-text">جاهز للعمل دون اتصال (Offline-First PWA)</span>
+        </span>
+        <button id="btn-install-pwa" type="button" class="px-2.5 py-1 rounded-md bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs transition">
+          📲 تثبيت التطبيق على الجهاز
+        </button>
+      </div>
+    </div>
+  </div>
+
+      <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-brand-500/15 text-brand-400 border border-brand-500/30">
+              الجدول الزمني الثابت (9 أشهر ≈ 39 أسبوعاً: 36 أسبوع دراسة = 612 ساعة + 3 أسابيع مراجعة ومعامل)
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-2">
+              خطة الأشهر التسعة التفصيلية وتوزيع عتاد المختبر لمصطفى
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">
+              توزيع مدروس بمعدل <strong>17 ساعة أسبوعياً</strong> (حوالي 2.5 ساعة يومياً) داخل النطاق المطلوب 15-18 ساعة، مع تخصيص <strong>3 أسابيع كاملة</strong> داخل الأشهر التسعة للمراجعة والمعامل العملية وتعويض أي أسبوع متعثر، مع استغلال مثالي لجهاز Fedora المحمول وخادم المختبر Rocky Linux.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-center shrink-0">
+            <div class="text-xs text-slate-400">إجمالي ساعات المرحلة الأولى</div>
+            <div class="text-2xl font-extrabold text-brand-400 font-mono">612 ساعة</div>
+            <div class="text-[11px] text-emerald-400">موزعة بدقة على 18 وحدة (9 أشهر)</div>
+          </div>
+        </div>
+
+        <!-- Hardware Architecture Strategy for Mostafa -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
+          <div class="p-5 rounded-2xl bg-slate-950/90 border border-blue-500/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-extrabold text-blue-400 flex items-center gap-2">
+                <span>💻</span>
+                <span>الجهاز اليومي: Fedora Workstation (i5-6200U / 8GB / SSD+HDD)</span>
+              </h3>
+              <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-blue-500/15 text-blue-300">Workstation</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              يُستخدم كمحطة عمل رئيسية (Control Node) لكتابة الأكواد، إدارة مستودعات Git، تشغيل AWS CLI و Terraform، وبناء حاويات Docker المحلية السريعة على قرص الـ SSD.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 list-disc pr-5">
+              <li><strong>توزيع التخزين (SSD + HDD):</strong> ثبّت نظام الجذر <code>/</code> وملفات المشاريع النشطة على الـ SSD لسرعة الإقلاع، واجعل صور الحاويات الكبيرة والنسخ الاحتياطية على الـ HDD.</li>
+              <li><strong>إدارة الذاكرة (8GB RAM):</strong> استخدم VS Code أو Neovim مع إيقاف الإضافات الثقيلة عند تشغيل عناقيد Kubernetes محلية (يفضل تشغيل K3s على جهاز المختبر وتوجيه <code>kubectl</code> من Fedora).</li>
+              <li><strong>الأدوات المثبتة محلياً:</strong> <code>aws-cli</code>, <code>terraform</code>, <code>ansible</code>, <code>kubectl</code>, <code>helm</code>, <code>git</code>, <code>podman/docker</code>, <code>trivy</code>.</li>
+            </ul>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-950/90 border border-emerald-500/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-extrabold text-emerald-400 flex items-center gap-2">
+                <span>🖥️</span>
+                <span>خادم المختبر: Rocky Linux Minimal + Kickstart (i3-2200 / 4GB / HDD)</span>
+              </h3>
+              <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-emerald-500/15 text-emerald-300">Home Lab Server</span>
+            </div>
+            <p class="text-xs text-slate-300">
+              يعمل كخادم لينكس حقيقي بدون واجهة رسومية (Headless Server) لاستهلاك أقل من 350MB RAM عند الإقلاع، مما يوفر قرابة 3.5GB RAM لتشغيل خدمات البنية التحتية.
+            </p>
+            <ul class="text-xs text-slate-300 space-y-1.5 list-disc pr-5">
+              <li><strong>الأتمتة بـ Kickstart:</strong> في الوحدة 3 والوحدة 16، ستبني ملف <code>anaconda-ks.cfg</code> لإعادة تهيئة الخادم تلقائياً بضغطة زر مع تقسيم LVM وتفعيل جدار الحماية و SSH Keys.</li>
+              <li><strong>تحسين أداء قرص HDD والذاكرة 4GB:</strong> تفعيل <code>zram</code> لضغط الذاكرة العشوائية، وتجنب تشغيل Jenkins و GitLab معاً في نفس اللحظة (تشغيل الخدمة المطلوبة للوحدة الحالية فقط عبر Docker Compose أو K3s).</li>
+              <li><strong>ربط الشبكة:</strong> ربطه مع جهاز Fedora عبر SSH ومفاتيح ED25519 وعبر شبكة Cloudflare Zero Trust / Tailscale المجانية للوصول الآمن من أي مكان.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 9-Month Breakdown Table -->
+        <div class="pt-4">
+          <h3 class="text-base font-extrabold text-white mb-3 flex items-center gap-2">
+            <span>📅</span>
+            <span>جدول توزيع الأشهر التسعة للمرحلة الأولى (18 وحدة = 612 ساعة تدريبية)</span>
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-right text-xs sm:text-sm">
+              <thead class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-4 font-bold">الشهر</th>
+                  <th class="py-3 px-4 font-bold">الوحدات المقررة</th>
+                  <th class="py-3 px-4 font-bold">محور التركيز الأساسي (AWS + DevOps)</th>
+                  <th class="py-3 px-4 font-bold">إجمالي الساعات</th>
+                  <th class="py-3 px-4 font-bold">المعدل الأسبوعي</th>
+                  <th class="py-3 px-4 font-bold">حالة الشهر</th>
+                </tr>
+              </thead>
+              <tbody id="plan-9m-tbody" class="divide-y divide-slate-800/80 bg-slate-900/50"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4-Week Monthly Breakdown with Study Sessions -->
+        <div class="pt-4">
+          <h3 class="text-base font-extrabold text-white mb-1 flex items-center gap-2">
+            <span>🗓️</span>
+            <span>تقسيم كل شهر إلى 4 أسابيع وجلسات دراسة (2-3 ساعات يوميًا)</span>
+          </h3>
+          <p class="text-xs text-slate-400 mb-3">كل شهر = 4 أسابيع دراسة فعلية (9 أشهر = 36 أسبوع دراسة ≈ 612 ساعة)، والأيام الزائدة عن الأسابيع الأربعة في الشهر الميلادي (حوالي 3 أسابيع إجمالًا) محجوزة للمراجعة والمعامل وتعويض أي تأخير — لا تُحسب دراسة جديدة. الأسبوع ≈ 17 ساعة. تقسيم الجلسات أدناه مقترح مرن (حوالي 6 جلسات × 2-3 ساعات، تشمل المشاهدة والتطبيق) — وزّعه على أيام أسبوعك كما يناسبك، وليس التزامًا صارمًا.</p>
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <label for="select-weeks-month" class="text-xs font-bold text-slate-300">اختر الشهر:</label>
+            <select id="select-weeks-month" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white"></select>
+          </div>
+          <div id="plan-weeks-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: VIDEO ANALYSIS & RESTRUCTURING JUSTIFICATION ==================== -->
+    <section id="view-analysis" class="hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            تحليل منهجي موثق للفيديو المرجعي (youtu.be/g79127FpNyk)
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-2">
+            تحليل فيديو خريطة طريق مهندس الكلاود (DolfinED) وتبرير تحسينات هيكلة المسار
+          </h2>
+          <p class="text-sm text-slate-300 mt-1">
+            تمت دراسة وتحليل الفيديو المرجعي <a href="https://youtu.be/g79127FpNyk" target="_blank" rel="noopener noreferrer" class="text-brand-400 underline font-semibold">Cloud Engineer Roadmap | خريطة طريق مهندس الكلاود (2026)</a> للمهندس عيسى (قناة DolfinED)، ومقارنة تسلسله المنطقي مع خارطة طريق مصطفى لتطبيق التعديلات الهيكلية الأكثر منطقية وظيفياً وعلمياً.
+          </p>
+        </div>
+
+        <!-- Core Philosophy Extracted from Video -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+            <div class="text-brand-400 font-extrabold text-sm">1. نهاية عصر الشهادة المنفردة ("البرشامة السحرية")</div>
+            <p class="text-xs text-slate-300">
+              يؤكد الفيديو بوضوح أن الحصول على شهادة Cloud Practitioner أو حتى SAA-C03 وحدها دون إتقان Linux و Terraform و Docker و Git وبناء مشاريع عملية لم يعد يوظف أحداً في سوق العمل الحديث منذ 2020 وحتى 2026.
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+            <div class="text-emerald-400 font-extrabold text-sm">2. التسلسل التراكمي القائم على التبعيات (Scaffolding)</div>
+            <p class="text-xs text-slate-300">
+              يرتب الفيديو المهارات بحيث تخدم كل أداة الأداة التي تليها مباشرة: تعلم مبادئ الشبكات والسحابة أولاً، ثم حساب AWS لتطبيق Linux عليه، ثم Bash و Git لحفظ السكريبتات، ثم Python، ثم YAML قبل Docker و Kubernetes، ثم Terraform و SAA-C03 و CI/CD و Ansible.
+            </p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+            <div class="text-cyan-400 font-extrabold text-sm">3. الإطار الزمني الواقعي (8 إلى 9 أشهر) والمشاريع</div>
+            <p class="text-xs text-slate-300">
+              يشدد الفيديو على أن التحول الحقيقي من مبتدئ تماماً إلى مهندس جاهز للمقابلات التقنية يتطلب 8 إلى 9 أشهر من العمل المستمر وبناء محفظة مشاريع على GitHub، مع استخدام أدوات الذكاء الاصطناعي للمراجعة والتسريع فقط بعد الفهم العميق.
+            </p>
+          </div>
+        </div>
+
+        <!-- Exact Sequence in Video vs Restructured Sequence Table -->
+        <div class="space-y-3">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <span>🔄</span>
+            <span>مقارنة التسلسل وإثبات التغييرات الهيكلية المبررة في خارطة طريق مصطفى</span>
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-right text-xs sm:text-sm">
+              <thead class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-4 font-bold">التعديل الهيكلي</th>
+                  <th class="py-3 px-4 font-bold">الوضع في المسارات التقليدية القديمة</th>
+                  <th class="py-3 px-4 font-bold">التسلسل المعتمد بناءً على تحليل الفيديو</th>
+                  <th class="py-3 px-4 font-bold">التبرير الهندسي والتربوي (لماذا هذا الترتيب أفضل لمصطفى؟)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 bg-slate-900/50 text-slate-200">
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">1. دمج أساسيات الشبكات و TCP/IP مع مفاهيم الكلاود في الوحدة 1 (بدل كورسات CCNA/A+ المنفصلة)</td>
+                  <td class="py-3 px-4 text-slate-400">قضاء 3-4 أشهر في دراسة A+ و Network+ و CCNA كاملة قبل لمس السحابة أو لينكس.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدة 1: أساسيات تكنولوجيا المعلومات والشبكات (TCP/IP, DNS, Routing) ومفاهيم الحوسبة السحابية معاً.</td>
+                  <td class="py-3 px-4">كما أوضح الفيديو (الدقيقة 08:45)، دراسة CCNA كاملة للمبتدئ الراغب في الكلاود تستهلك أشهراً في بروتوكولات أجهزة سيسكو التقليدية، بينما يحتاج مهندس الكلاود إلى فهم عملي مركز لـ IP، Subnetting، DNS، HTTP/HTTPS، و Virtualization للدخول فوراً في بيئة AWS ولينكس.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">2. تقديم مدخل خدمات AWS الأساسية (الوحدة 2) قبل التعمق في Linux (الوحدة 3)</td>
+                  <td class="py-3 px-4 text-slate-400">تأجيل فتح حساب AWS إلى منتصف المسار بعد إنهاء Linux و Bash و Python بالكامل.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدة 2: مدخل خدمات AWS الأساسية (IAM, EC2, VPC) ثم الوحدة 3 و 4: إدارة Linux على كل من خادم Rocky المحلي ومثيلات AWS EC2.</td>
+                  <td class="py-3 px-4">يتفق هذا مع ترتيب الفيديو (الدقيقة 09:12) ومع هدف مصطفى في التركيز المستمر على AWS منذ الشهر الأول؛ حيث يتيح لمصطفى تطبيق أوامر Linux وإعدادات الشبكات بالتوازي على خادم المختبر (i3-2200 Rocky Linux) وعلى مثيلات EC2 المجانية في سحابة AWS.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">3. وضع Git و GitHub (الوحدة 6) مباشرة بعد Bash (الوحدة 5) وقبل Python و Docker و Terraform</td>
+                  <td class="py-3 px-4 text-slate-400">وضع Git كأداة ثانوية قريباً من نهاية المسار عند دراسة أنابيب CI/CD.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدة 5: Bash Scripting ثم الوحدة 6: إتقان Git و GitHub، تليها الوحدة 7: أتمتة AWS بلغة Python.</td>
+                  <td class="py-3 px-4">أكد الفيديو (الدقيقة 10:02) أن المهندس سيكتب عشرات السكريبتات وقوالب Terraform وملفات Kubernetes YAML، لذا يجب أن يتقن Git و GitHub مبكراً جداً لحفظ إصدارات الكود وبناء معرض مشاريع (GitHub Portfolio) منذ الشهر الثالث.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">4. تخصيص وحدة مستقلة للغة YAML وبيانات التهيئة مع Docker (الوحدة 9) قبل Kubernetes (الوحدة 10)</td>
+                  <td class="py-3 px-4 text-slate-400">الدخول في Docker Compose و Kubernetes و Ansible مباشرة دون تأسيس هيكلي للغة YAML مما يسبب أخطاء المسافات البادئة (Indentation Errors).</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدة 9: إتقان لغة YAML وتقنية الحاويات Docker & Docker Compose، تليها الوحدة 10: تنسيق الحاويات Kubernetes & AWS EKS.</td>
+                  <td class="py-3 px-4">أشار الفيديو (الدقيقة 11:01) إلى أن تعلم YAML في البداية يزيل أكبر عقبة يواجهها المبتدئون عند كتابة ملفات <code>docker-compose.yml</code> و <code>k8s manifests</code> ومهام GitHub Actions وخطط Ansible Playbooks.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">5. وضع Terraform (الوحدة 11) ومعمارية AWS SAA-C03 المتقدمة (الوحدة 12) بعد فهم الحاويات وقبل CI/CD</td>
+                  <td class="py-3 px-4 text-slate-400">دراسة Terraform قبل معرفة ما هي الحاويات أو قواعد البيانات أو موازنات الأحمال التي سنقوم بأتمتة بنائها.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدة 8 (خدمات AWS للشبكات وقواعد البيانات) + الوحدات 9-10 (Docker & K8s/EKS) ← ثم الوحدة 11 (Terraform IaC) والوحدة 12 (معمارية AWS SAA-C03).</td>
+                  <td class="py-3 px-4">كما ورد في الفيديو (الدقيقة 11:18)، عندما يتعلم الطالب Terraform بعد أن يكون قد جرّب بناء VPC و EC2 و Docker و EKS، يصبح قادراً على تحويل كل ما تعلمه إلى كود برمجي (IaC) وتصميم معماريات SAA-C03 احترافية.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">6. تجميع أنابيب CI/CD (GitHub Actions & Jenkins في الوحدة 13 + GitLab CI في الوحدة 14) متبوعة بـ Ansible (الوحدة 16)</td>
+                  <td class="py-3 px-4 text-slate-400">تشتيت أدوات الأتمتة والنشر المستمر في أماكن متباعدة.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الوحدات 13 و 14 (CI/CD شاملة) + الوحدة 15 (المراقبة Prometheus & Grafana) + الوحدة 16 (Ansible & RHCE على AWS ومختبر Rocky Linux).</td>
+                  <td class="py-3 px-4">ينسجم تماماً مع خطوات الفيديو (الدقيقة 11:36 - 11:50) حيث يقوم المهندس بربط البنية التحتية (Terraform) مع نشر التطبيقات الآلي (CI/CD) وتكوين الخوادم المركزية (Ansible).</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-brand-400">7. حصر Azure و GCP في الشهر التاسع فقط (الوحدة 18) وتأجيل DevSecOps للمرحلة الثانية (الوحدات 19-27)</td>
+                  <td class="py-3 px-4 text-slate-400">خلط AWS و Azure و GCP معاً في البداية مما يربك المبتدئ، أو إدخال أدوات الفحص الأمني قبل فهم بناء الأنابيب أصلاً.</td>
+                  <td class="py-3 px-4 text-emerald-300 font-semibold">الشهر 1-8 تركيز خالص على AWS؛ الشهر 9 (الوحدة 18): مقارنة متعددي السحابة مع Azure (AZ-900) و GCP؛ ثم المرحلة 2 (9 وحدات): DevSecOps.</td>
+                  <td class="py-3 px-4">يطبق نصيحة الفيديو (الدقيقة 02:10 و 11:53): إتقان سحابة واحدة (AWS صاحبة الحصة السوقية الأكبر) يجعل تعلم Azure أو GCP في النهاية مسألة مطابقة مصطلحات (Mapping) لا تستغرق سوى أسابيع قليلة، ويمنح أرضية صلبة للتخصص في DevSecOps لاحقاً.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: FREE-FOR.DEV DIRECTORY ==================== -->
+    <section id="view-freefordev" class="hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <span class="free-tag">موثق من الدليل العالمي https://free-for.dev</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white mt-2">
+              دليل مصطفى الشامل لأفضل الأدوات والمنصات السحابية المجانية (Free & Freemium)
+            </h2>
+            <p class="text-sm text-slate-300 mt-1">
+              يجمع هذا الجدول المنظم أفضل الخدمات السحابية المجانية الموثقة في <a href="https://free-for.dev" target="_blank" rel="noopener noreferrer" class="text-purple-400 underline font-semibold">free-for.dev</a> لتطبيق مشاريعك في AWS والـ DevOps والـ DevSecOps دون تكبد تكاليف مالية، بالإضافة إلى إدراج أداة مخصصة داخل كل وحدة من الوحدات الـ 27.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <select id="select-free-category" class="px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-slate-200 font-semibold">
+              <option value="all">جميع فئات الأدوات المجانية (20 أداة رئيسية)</option>
+              <option value="خوادم سحابية و VPS مجاني دائم">خوادم سحابية و VPS مجاني دائم</option>
+              <option value="استضافة وشبكات و CDN">استضافة وشبكات و CDN</option>
+              <option value="أنابيب CI/CD ومستودعات الكود">أنابيب CI/CD ومستودعات الكود</option>
+              <option value="سجلات الحاويات و Kubernetes">سجلات الحاويات و Kubernetes</option>
+              <option value="البنية التحتية ككود (IaC) وإدارة السحابة">البنية التحتية ككود (IaC) وإدارة السحابة</option>
+              <option value="قواعد البيانات المدارة (DBaaS)">قواعد البيانات المدارة (DBaaS)</option>
+              <option value="المراقبة والسجلات والتنبيهات">المراقبة والسجلات والتنبيهات</option>
+              <option value="أمن DevSecOps وإدارة الأسرار">أمن DevSecOps وإدارة الأسرار</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-right text-xs sm:text-sm">
+            <thead class="bg-slate-950 text-slate-300 border-b border-slate-800">
+              <tr>
+                <th class="py-3.5 px-4 font-bold">الأداة / المنصة</th>
+                <th class="py-3.5 px-4 font-bold">الفئة</th>
+                <th class="py-3.5 px-4 font-bold">تفاصيل الباقة المجانية وحدود الاستخدام (Free Tier)</th>
+                <th class="py-3.5 px-4 font-bold">كيف يستفيد منها مصطفى في المسار؟</th>
+                <th class="py-3.5 px-4 font-bold">الوحدات المرتبطة</th>
+                <th class="py-3.5 px-4 font-bold">الرابط</th>
+              </tr>
+            </thead>
+            <tbody id="freefordev-tbody" class="divide-y divide-slate-800 bg-slate-900/50 text-slate-200"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 5: PROGRESS REPORT & JSON SYNC ==================== -->
+    <section id="view-report" class="hidden space-y-6">
+      <!-- Sync / Backup Card (Export & Import JSON + Offline SW Generator) -->
+      <div class="no-print p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              النقل اليدوي والنسخ الاحتياطي والنشر السحابي (Cloudflare / GitHub Pages)
+            </span>
+            <h2 class="text-xl font-extrabold text-white mt-2">
+              نقل التقدم يدوياً عبر JSON وإدارة ملفات PWA
+            </h2>
+            <p class="text-sm text-slate-300 mt-1">
+              يعمل التطبيق بالكامل دون اتصال بالإنترنت (Zero CDN). يمكنك نقل تقدمك وملاحظاتك وسلسلة أيام المذاكرة بين Fedora Workstation وهاتفك المحمول عبر تصدير واستيراد ملف JSON.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <button type="button" id="btn-download-sw" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-brand-400 border border-slate-700 font-bold text-xs transition" title="تحميل ملف sw.js المستقل عند الرغبة في رفعه بجانب index.html على Cloudflare Pages">
+              ⚙️ تحميل sw.js للنشر
+            </button>
+            <button type="button" id="btn-download-manifest" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 font-bold text-xs transition" title="تحميل ملف manifest.webmanifest المستقل">
+              📦 تحميل manifest.json
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Export JSON -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="text-sm font-bold text-brand-400 flex items-center gap-1.5">
+                <span>📤</span>
+                <span>1. تصدير التقدم كملف JSON</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                يحفظ حالة جميع الوحدات الـ 27، والمصادر الفردية المكتملة، والملاحظات النصية، وسجل أيام الدراسة في ملف JSON جاهز للنقل.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" id="btn-export-json" class="flex-1 px-3 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs transition">
+                📥 تحميل ملف التقدم (.json)
+              </button>
+              <button type="button" id="btn-copy-json" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition">
+                📋 نسخ JSON
+              </button>
+            </div>
+          </div>
+
+          <!-- Import JSON -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="text-sm font-bold text-cyan-400 flex items-center gap-1.5">
+                <span>📥</span>
+                <span>2. استيراد ملف تقدم JSON</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                اختر ملف JSON الذي قمت بتصديره من جهازك الآخر لاستعادة كامل تقدمك وملاحظاتك فوراً.
+              </p>
+            </div>
+            <div>
+              <label for="input-import-json" class="cursor-pointer w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs transition">
+                <span>📂 اختيار ملف JSON للاستيراد</span>
+              </label>
+              <input id="input-import-json" type="file" accept=".json,application/json" class="hidden" />
+            </div>
+          </div>
+
+          <!-- Print / Export Official Progress Report -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                <span>🖨️</span>
+                <span>3. طباعة أو تصدير تقرير الإنجاز</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">
+                اطبع تقريراً رسمياً منسقاً بالعربية (أو احفظه كملف PDF من نافذة الطباعة، أو حمله كملف Markdown) يتضمن إحصائياتك وملاحظاتك.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" id="btn-print-report" class="flex-1 px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">
+                🖨️ طباعة / حفظ PDF
+              </button>
+              <button type="button" id="btn-export-md-report" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs transition">
+                📄 تصدير تقرير (.md)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Printable / Live Progress Report Preview -->
+      <div id="printable-report-area" class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-white">تقرير متابعة التقدم الدراسي – مصطفى</h2>
+            <p class="text-xs text-slate-400 mt-0.5">المسار المتكامل لهندسة الحوسبة السحابية (AWS) والـ DevOps والـ DevSecOps</p>
+          </div>
+          <div class="text-xs text-slate-400 font-mono" id="report-date-stamp"></div>
+        </div>
+
+        <div id="report-summary-metrics" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+
+        <!-- Audit Summary Lists (Dolfined Coverage & free-for.dev Coverage) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+            <h3 class="text-sm font-extrabold text-emerald-400 flex items-center gap-1.5">
+              <span>🎥</span>
+              <span>إحصائية تغطية فيديوهات قناة dolfined عبر الوحدات الـ 27</span>
+            </h3>
+            <div id="report-dolfined-summary" class="text-xs text-slate-300 space-y-2"></div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
+            <h3 class="text-sm font-extrabold text-purple-400 flex items-center gap-1.5">
+              <span>🎁</span>
+              <span>إحصائية تغطية أدوات free-for.dev عبر الوحدات الـ 27</span>
+            </h3>
+            <div id="report-freefordev-summary" class="text-xs text-slate-300 space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- Full Units Table in Report -->
+        <div class="space-y-2">
+          <h3 class="text-sm font-extrabold text-white">جدول حالة جميع الوحدات الدراسية والملاحظات المسجلة</h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-right text-xs">
+              <thead class="bg-slate-950 text-slate-300 border-b border-slate-800">
+                <tr>
+                  <th class="py-2.5 px-3">#</th>
+                  <th class="py-2.5 px-3">الوحدة التدريبية</th>
+                  <th class="py-2.5 px-3">المرحلة / الشهر</th>
+                  <th class="py-2.5 px-3">الساعات</th>
+                  <th class="py-2.5 px-3">المصادر المكتملة</th>
+                  <th class="py-2.5 px-3">الحالة</th>
+                  <th class="py-2.5 px-3">ملاحظات مصطفى</th>
+                </tr>
+              </thead>
+              <tbody id="report-units-tbody" class="divide-y divide-slate-800 bg-slate-900/40 text-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reset Progress Danger Zone -->
+        <div class="no-print pt-4 border-t border-slate-800 flex items-center justify-between">
+          <span class="text-xs text-slate-400">هل ترغب في بدء المسار من جديد ومسح التقدم المخزن محلياً؟</span>
+          <button type="button" id="btn-open-reset-modal" class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 text-xs font-bold transition">
+            🗑️ إعادة ضبط المصنع للتقدم
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="no-print border-t border-slate-800/80 bg-slate-950/90 py-5 px-4 text-xs text-slate-400 mt-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        صُمم وطُوّر خصيصاً للطالب <strong class="text-white">مصطفى</strong> • يعمل بالكامل دون اتصال (100% Zero-CDN Offline PWA) ومُحسّن لتوزيعة <strong class="text-brand-400">Fedora Workstation</strong> ومختبر <strong class="text-emerald-400">Rocky Linux</strong>.
+      </div>
+      <div class="flex items-center gap-3">
+        <span>اضغط <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700 font-mono">?</kbd> لعرض اختصارات لوحة المفاتيح</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL: KEYBOARD SHORTCUTS ==================== -->
+  <div id="modal-shortcuts" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <span>⌨️</span>
+          <span>اختصارات لوحة المفاتيح (لمستخدمي Fedora و Desktop)</span>
+        </h3>
+        <button type="button" id="btn-close-shortcuts" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">✖</button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div class="flex items-center justify-between py-2 border-b border-slate-800/70">
+          <span class="text-slate-300">التركيز السريع على شريط البحث الذكي</span>
+          <kbd class="px-2 py-1 rounded bg-slate-800 text-brand-400 font-mono border border-slate-700">/</kbd>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-slate-800/70">
+          <span class="text-slate-300">تبديل الوضع الليلي / النهاري</span>
+          <kbd class="px-2 py-1 rounded bg-slate-800 text-brand-400 font-mono border border-slate-700">Alt + T</kbd>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-slate-800/70">
+          <span class="text-slate-300">التنقل السريع بين التبويبات الخمسة</span>
+          <kbd class="px-2 py-1 rounded bg-slate-800 text-brand-400 font-mono border border-slate-700">Alt + 1 .. 5</kbd>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-slate-800/70">
+          <span class="text-slate-300">تصدير نسخة احتياطية سريعة للتقدم (JSON)</span>
+          <kbd class="px-2 py-1 rounded bg-slate-800 text-brand-400 font-mono border border-slate-700">Alt + E</kbd>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-slate-800/70">
+          <span class="text-slate-300">فتح نافذة الاختصارات أو إغلاق النوافذ المنبثقة</span>
+          <kbd class="px-2 py-1 rounded bg-slate-800 text-brand-400 font-mono border border-slate-700">? / Esc</kbd>
+        </div>
+      </div>
+      <div class="text-left pt-2">
+        <button type="button" id="btn-ok-shortcuts" class="px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs">حسناً، فهمت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: PWA INSTALLATION GUIDE ==================== -->
+  <div id="modal-pwa-guide" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-brand-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-extrabold text-brand-400 flex items-center gap-2">
+          <span>📲</span>
+          <span>تثبيت التطبيق للعمل دون اتصال (Fedora Desktop & Mobile)</span>
+        </h3>
+        <button type="button" id="btn-close-pwa-guide" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">✖</button>
+      </div>
+      <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+          <strong class="text-white block mb-1">💻 على نظام Fedora Workstation (Chrome / Brave / Edge / Firefox):</strong>
+          اضغط على أيقونة <strong>تثبيت التطبيق (Install App ⊕)</strong> الموجودة في شريط العنوان أعلى المتصفح، أو من القائمة اختر <em>"تثبيت أكاديمية مصطفى السحابية"</em> ليظهر كبرنامج سطح مكتب مستقل في قائمة تطبيقات GNOME.
+        </div>
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+          <strong class="text-white block mb-1">📱 على الهاتف المحمول (Android & iOS):</strong>
+          في متصفح Chrome على أندرويد اختر <strong>"إضافة إلى الشاشة الرئيسية / تثبيت التطبيق"</strong>، وفي متصفح Safari على آيفون اضغط زر المشاركة (Share) ثم اختر <strong>"إضافة إلى الشاشة الرئيسية (Add to Home Screen)"</strong>.
+        </div>
+        <div class="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30 text-emerald-300">
+          <strong>⚡ ميزة العمل الكامل دون إنترنت (True Zero-CDN Offline):</strong>
+          تم دمج جميع التنسيقات والخطوط والبيانات داخل التطبيق وتخزينها في Service Worker، بحيث يعمل التطبيق بسرعة فائقة حتى عند انقطاع الإنترنت تماماً.
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" id="btn-modal-download-sw" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold">
+          ⚙️ تحميل ملف sw.js للاستضافة
+        </button>
+        <button type="button" id="btn-ok-pwa-guide" class="px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs">
+          حسناً، فهمت
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: RESET CONFIRMATION ==================== -->
+  <div id="modal-reset" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-rose-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-extrabold text-rose-400 flex items-center gap-2">
+          <span>⚠️</span>
+          <span>تأكيد إعادة ضبط التقدم الدراسي</span>
+        </h3>
+        <button type="button" id="btn-close-reset" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">✖</button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        هل أنت متأكد من رغبتك في مسح جميع بيانات التقدم والمصادر المكتملة والملاحظات المحفوظة؟ ننصح بتحميل نسخة احتياطية (JSON) أولاً قبل المتابعة.
+      </p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button type="button" id="btn-cancel-reset" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold">إلغاء</button>
+        <button type="button" id="btn-confirm-reset" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold">نعم، امسح التقدم وابدأ من الصفر</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessible Toast Notification Container -->
+  <div id="toast-container" role="region" aria-live="polite" aria-label="الإشعارات والتنبيهات" class="no-print fixed bottom-5 left-5 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+  <!-- ==================== APPLICATION LOGIC & DATA ==================== -->
+  
+<button type="button" id="mca-mascot-restore" class="hidden" aria-label="إظهار مساعد مصطفى الصغير" title="إظهار المساعد">🦇</button>
+<div id="mca-mascot" role="button" tabindex="0" aria-label="مساعد مصطفى الصغير - اضغط لنصيحة دراسية" title="اضغط لنصيحة!">
+    <svg viewBox="0 0 120 164" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- tiny bats -->
+    <path d="M6 22 q5 -8 10 0 q5 -8 10 0 q-5 4 -10 1.5 q-5 2.5 -10 -1.5z" fill="#0b0b0d"/>
+    <path d="M96 12 q4 -6 8 0 q4 -6 8 0 q-4 3 -8 1.2 q-4 1.8 -8 -1.2z" fill="#0b0b0d"/>
+    <!-- coat collar flare -->
+    <path d="M36 102 Q8 88 10 54 Q24 74 46 88 Z" fill="#7f1d1d" stroke="#3f0a0a" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M84 102 Q112 88 110 54 Q96 74 74 88 Z" fill="#7f1d1d" stroke="#3f0a0a" stroke-width="2" stroke-linejoin="round"/>
+    <!-- long side hair falls -->
+    <path d="M30 52 Q20 96 32 126 L41 112 Q33 82 39 58 Z" fill="#0b0b0d"/>
+    <path d="M90 52 Q100 96 88 126 L79 112 Q87 82 81 58 Z" fill="#0b0b0d"/>
+    <!-- face -->
+    <ellipse cx="60" cy="78" rx="24" ry="22" fill="#f7e0cf"/>
+    <!-- hair crown: big spiky silhouette -->
+    <path d="M33 66
+             L24 44 L34 46
+             L28 24 L40 30
+             L40 8 L52 20
+             L58 2 L64 18
+             L76 6 L76 22
+             L92 16 L86 32
+             L100 34 L90 46
+             Q96 56 88 62
+             L82 50 L76 58 L70 46 L62 56 L55 44 L47 55 L43 44 L36 56
+             Z" fill="#0b0b0d"/>
+    <!-- bangs over forehead -->
+    <path d="M38 60 L44 74 L49 58 L55 72 L61 56 L66 70 L72 56 L74 66 Q60 58 38 60 Z" fill="#0b0b0d"/>
+    <!-- long strand covering right eye -->
+    <path d="M70 44 Q86 50 85 84 Q83 94 77 86 Q82 62 66 50 Z" fill="#0b0b0d"/>
+    <!-- left eye -->
+    <g class="mca-eye">
+      <ellipse cx="48" cy="80" rx="5.6" ry="6.6" fill="#ffffff"/>
+      <circle cx="48.7" cy="80.7" r="3.8" fill="#dc2626"/>
+      <circle cx="49.3" cy="81" r="1.7" fill="#450a0a"/>
+      <circle cx="47.4" cy="79" r="1" fill="#ffffff"/>
+    </g>
+    <!-- right eye peeking under hair -->
+    <g class="mca-eye">
+      <ellipse cx="70" cy="81" rx="3" ry="4.6" fill="#ffffff"/>
+      <circle cx="70.4" cy="81.5" r="2.1" fill="#dc2626"/>
+    </g>
+    <!-- grin + fang -->
+    <path d="M47 92 Q60 101 73 91" fill="none" stroke="#7f1d1d" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M62 96.6 L67.5 95.8 L64.8 102 Z" fill="#ffffff" stroke="#d1a19a" stroke-width="0.7"/>
+    <!-- coat body -->
+    <path d="M28 164 L33 104 Q60 92 87 104 L92 164 Z" fill="#991b1b" stroke="#3f0a0a" stroke-width="2" stroke-linejoin="round"/>
+    <!-- black suit -->
+    <path d="M47 104 L60 97 L73 104 L71 164 L49 164 Z" fill="#111827"/>
+    <!-- red cravat -->
+    <path d="M53 100 L60 95 L67 100 L64 108 L60 113 L56 108 Z" fill="#b91c1c" stroke="#3f0a0a" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="60" cy="122" r="2.2" fill="#fbbf24"/>
+    <circle cx="60" cy="132" r="2.2" fill="#fbbf24"/>
+  </svg>
+</div>
+
+  <!-- v5.0.0 module wiring: data first, then app logic -->
+  <script src="./data.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
